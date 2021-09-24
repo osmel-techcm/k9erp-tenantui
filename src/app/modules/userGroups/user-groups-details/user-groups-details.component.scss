@@ -1,0 +1,33 @@
+.main-card {
+    margin-top: 10px;
+  }
+  
+  .group-div {
+    margin: 0 30px 30px 30px;
+  }
+
+  .checkbox-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+  }
+  
+  .checkbox-margin {
+    margin: 7px 10px 0 0;
+  }
+
+  .tree-permission-invisible {
+    display: none;
+  }
+  
+  .tree-permission ul,
+  .tree-permission li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+  }
+
+ .mat-tree-node {
+    min-height: 40px;
+}

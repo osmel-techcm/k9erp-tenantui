@@ -1,0 +1,35 @@
+<header class="title">
+    <h1>Classes Details</h1>
+    <div class="actions">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="openClass(0)">
+          <mat-icon>add</mat-icon>
+          <span>New</span>
+        </button>
+        <button mat-menu-item (click)="deleteClass()" [disabled]="!_class.id">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    </div>
+  </header>
+  
+  <div class="mat-elevation-z8 group-div" id="headerSection">
+    <mat-card class="main-card">
+      <mat-card-content>
+        <div class="row">
+            <mat-form-field class="col-sm-2">
+            <input matInput placeholder="Name" [(ngModel)]="_class.name" required data-validate="name">
+            <mat-error *ngIf="!_class.name">Name is required!</mat-error>
+            </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="text-right">
+        <button mat-raised-button color="primary" (click)="saveClass()">Save</button>
+        <button mat-raised-button (click)="goToClassList()">Back to List</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>

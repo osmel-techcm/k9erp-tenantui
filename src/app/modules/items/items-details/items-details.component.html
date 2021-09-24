@@ -1,0 +1,97 @@
+<header class="title">
+    <h1>Item Details</h1>
+    <div class="actions">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="openItem(0)">
+          <mat-icon>add</mat-icon>
+          <span>New</span>
+        </button>
+        <button mat-menu-item (click)="deleteItem()" [disabled]="!item.id">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    </div>
+  </header>
+  
+  <div class="mat-elevation-z8 group-div" id="headerSection">
+    <mat-card class="main-card">
+      <mat-card-content>
+        <div class="row">
+            <mat-form-field class="col-sm-2">
+              <input matInput placeholder="Name" [(ngModel)]="item.name" required data-validate="name">
+            <mat-error *ngIf="!item.name">Name is required!</mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-sm-2">
+              <mat-label>Type</mat-label>
+              <mat-select [(ngModel)]="item.idType" name="idType">
+                <mat-option [value]="1">Inventory</mat-option>
+                <mat-option [value]="2">Service</mat-option>
+                <mat-option [value]="3">NonInventory</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-sm-1">
+              <input matInput placeholder="Quantity On Hand" [(ngModel)]="item.qtyOnHand" data-validate="qtyOnHand" [disabled]="true" class="text-right">
+            </mat-form-field>
+            <mat-form-field class="col-sm-1">
+              <span matPrefix>$&nbsp;</span>
+              <input matInput placeholder="Unit Price" [(ngModel)]="item.unitPrice" data-validate="unitPrice" class="text-right">
+            </mat-form-field>
+            <mat-form-field class="col-sm-2">
+              <mat-label>Class</mat-label>
+              <input type="text" placeholder="Class" name="idClass" aria-label="text" matInput [matAutocomplete]="autoClass" [(ngModel)]="item.className" (blur)="checkBlur('className', _classes, 'name', 'idClass')" (keyup)="updateSource('className')">
+              <button mat-button matSuffix mat-icon-button aria-label="dropdown">
+                <mat-icon>keyboard_arrow_down</mat-icon>
+              </button>
+              <mat-autocomplete #autoClass="matAutocomplete">
+                <mat-option *ngFor="let _class of _classes" [value]="_class.name">{{_class.name}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field class="col-sm-2">
+              <mat-label>Unit</mat-label>
+              <input type="text" placeholder="Unit" name="idUnit" aria-label="text" matInput [matAutocomplete]="autoUnit" [(ngModel)]="item.unitName" (blur)="checkBlur('unitName', _units, 'name', 'idUnit')" (keyup)="updateSource('unitName')">
+              <button mat-button matSuffix mat-icon-button aria-label="dropdown">
+                <mat-icon>keyboard_arrow_down</mat-icon>
+              </button>
+              <mat-autocomplete #autoUnit="matAutocomplete">
+                <mat-option *ngFor="let _unit of _units" [value]="_unit.name">{{_unit.name}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="SKU" [(ngModel)]="item.sku" data-validate="sku">
+          </mat-form-field>
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="UPC" [(ngModel)]="item.upc" data-validate="upc">
+          </mat-form-field>
+          <mat-form-field class="col-sm-2">
+            <mat-label>Location</mat-label>
+            <input type="text" placeholder="Location" name="defaultLocation" aria-label="text" matInput [matAutocomplete]="autoLocation" [(ngModel)]="item.defaultLocationName" (blur)="checkBlur('defaultLocationName', _locations, 'locationName', 'defaultLocation')" (keyup)="updateSource('defaultLocationName')">
+            <button mat-button matSuffix mat-icon-button aria-label="dropdown">
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </button>
+            <mat-autocomplete #autoLocation="matAutocomplete">
+              <mat-option *ngFor="let _location of _locations" [value]="_location.locationName">{{_location.locationName}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <section class="checkbox-section col-sm-1">
+            <mat-checkbox [(ngModel)]="item.inactive">Inactive</mat-checkbox>
+          </section>     
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="text-right">
+        <button mat-raised-button color="primary" (click)="saveItem()">Save</button>
+        <button mat-raised-button (click)="goToItemList()">Back to List</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <mat-tab-group class="mat-elevation-z8 group-div" *ngIf="_loadDetails&&item.id">
+    <mat-tab label="Attachments">
+      <app-attachments [_type]="_type" [_id]="item.id"></app-attachments>
+    </mat-tab>
+  </mat-tab-group>

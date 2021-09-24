@@ -1,0 +1,29 @@
+.group-div {
+  margin: 30px;
+  padding: 15px;
+}
+
+.button-report {
+    margin: 0 10px;
+}
+
+.mat-column-id {
+    width: 25%;
+    padding-right: 10px;
+}
+
+.table-report {
+    tr {
+        cursor: pointer;
+    }
+
+    tr:hover {
+        background: whitesmoke;
+    }
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+    padding: 0 15px;
+}

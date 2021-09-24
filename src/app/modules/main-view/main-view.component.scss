@@ -1,0 +1,125 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+.example-is-mobile .example-toolbar {
+  position: fixed;
+  z-index: 2;
+}
+
+h1.example-app-name {
+  margin-left: 10px;
+}
+
+.mat-sidenav {
+  width: 350px;
+}
+
+.example-toolbar {
+  background: #4285F4;
+  color: white;
+  height: 40px;
+}
+
+.menu-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+
+.menu-btn-burger {
+  width: 15px;
+  height: 2px;
+  background: #fff;
+  border-radius: 5px;
+  transition: all .3s ease-in-out;
+}
+
+.menu-btn-burger::before,
+.menu-btn-burger::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 2px;
+  background: #fff;
+  border-radius: 5px;
+  transition: all .3s ease-in-out;
+  left: 8px;
+}
+
+.menu-btn-burger::before {
+  transform: translateY(-6px);
+}
+
+.menu-btn-burger::after {
+  transform: translateY(6px);
+}
+
+.menu-btn.open .menu-btn-burger {  
+  background: transparent;
+  box-shadow: none;
+}
+
+.menu-btn.open .menu-btn-burger::before {
+  transform: rotate(45deg);
+}
+
+.menu-btn.open .menu-btn-burger::after {
+  transform: rotate(-45deg);
+}
+
+.menu-btn.open {
+  background: rgba(255,255,255,0.22);
+}
+
+/* new nav*/
+
+.sidenav-main {
+    height: 100%;
+}
+
+.menu-companies {
+  display: flex;
+}
+
+.icon-company {
+  min-width: 40px;
+}
+
+.text-company {
+  min-width: 100px;
+}
+
+.user-info {
+  font-size: 16px;
+  padding: 10px 20px;
+}
+
+.company-name {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.company-ads {
+  font-size: 12px;  
+  bottom: 0;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+}

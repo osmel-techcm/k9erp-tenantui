@@ -1,0 +1,65 @@
+<header class="title">
+    <h1>Vendor Details</h1>
+    <div class="actions">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="openVendor(0)">
+          <mat-icon>add</mat-icon>
+          <span>New</span>
+        </button>
+        <button mat-menu-item (click)="confirmDelete()" [disabled]="!_vendor.id">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    </div>
+  </header>
+  
+  <div class="mat-elevation-z8 group-div" id="headerSection">
+    <mat-card class="main-card">
+      <mat-card-content>
+        <div class="row">
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="Name" [(ngModel)]="_vendor.name" required data-validate="name">
+            <mat-error *ngIf="!_vendor.name">Name is required!</mat-error>
+          </mat-form-field>  
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="Address" [(ngModel)]="_vendor.address">            
+          </mat-form-field>
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="City" [(ngModel)]="_vendor.city">            
+          </mat-form-field>
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="State" type="text" [(ngModel)]="_vendor.state">            
+          </mat-form-field>
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="Zip" [(ngModel)]="_vendor.zip">            
+          </mat-form-field>
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="Country" [(ngModel)]="_vendor.country">            
+          </mat-form-field>
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="Phone" [(ngModel)]="_vendor.phone">            
+          </mat-form-field>
+          <mat-form-field class="col-sm-2">
+            <input matInput placeholder="Email" [(ngModel)]="_vendor.email">            
+          </mat-form-field>
+          <section class="checkbox-section col-sm-1">
+            <mat-checkbox [(ngModel)]="_vendor.inactive">Inactive</mat-checkbox>
+          </section>          
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="text-right">
+        <button mat-raised-button color="primary" (click)="saveVendor()">Save</button>
+        <button mat-raised-button (click)="goToVendorList()">Back to List</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <mat-tab-group class="mat-elevation-z8 group-div" *ngIf="_loadDetails&&_vendor.id">
+    <mat-tab label="Attachments">
+      <app-attachments [_type]="_type" [_id]="_vendor.id"></app-attachments>
+    </mat-tab>
+  </mat-tab-group>

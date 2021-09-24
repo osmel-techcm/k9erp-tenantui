@@ -1,0 +1,14 @@
+<label id="example-radio-group-label">Select a Company</label>
+<mat-radio-group
+  aria-labelledby="example-radio-group-label"
+  class="example-radio-group"
+  [(ngModel)]="tenantSel">
+  <mat-radio-button class="example-radio-button" *ngFor="let tenant of tenants" [value]="tenant">
+    {{tenant.tenantName}}
+  </mat-radio-button>
+</mat-radio-group>
+
+<div mat-dialog-actions>
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-button (click)="saveDialog()" cdkFocusInitial>Ok</button>
+</div>

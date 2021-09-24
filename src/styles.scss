@@ -1,0 +1,178 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:300");
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+body {
+  font-family: Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.pull-right {
+  right: 0;
+  position: absolute !important;
+}
+
+.pull-left {
+  left: 0;
+  position: absolute !important;
+}
+
+.text-right {
+  text-align: right;
+}
+
+
+/////SideNav
+
+.mat-sidenav-container {
+  background-color: white !important;
+
+  // .mat-sidenav-content {
+  //   display: flex;
+  //   flex-direction: column;
+  // }
+}
+
+.sidenav-toolbar {
+  display: flex;
+  flex-direction: row;
+}
+
+.mat-nav-list {
+  padding-top: 0;
+}
+
+.menu-list-item.mat-list-item {
+  .mat-list-item-content {
+    flex: 1 1 100%;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.container {
+  margin: 10px;
+
+  .title {
+    line-height: 100%;
+    font-weight: normal;
+    margin: 0;
+    text-transform: uppercase;
+    color: #676767;
+  }
+}
+
+.title {
+  margin-bottom: 2rem;
+  padding: 1rem 2rem 0;
+  position: relative;
+
+  > h1 {
+    line-height: 100%;
+    font-weight: normal;
+    font-size: 1rem;
+    margin: 0;
+    text-transform: uppercase;
+    color: #676767;
+  }
+
+  .actions {
+    position: absolute;
+    top: 0.3rem;
+    right: 1rem;
+    color: #bdbcbc;
+  }
+}
+
+.pull-right {
+  right: 0;
+  position: absolute !important;
+}
+
+.pull-left {
+  left: 0;
+  position: absolute !important;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mat-raised-button {
+  outline: none!important;
+}
+
+.green-snackbar {
+  background-color: green !important;
+  color: white;
+  white-space: pre-wrap;
+}
+
+.red-snackbar {
+  background-color: red !important;
+  color: white;
+  white-space: pre-wrap;
+}
+
+/// Custom table input
+
+.form-input-table { 
+  width: 100%;
+  padding-right: 1em;
+
+  .mat-form-field-wrapper {
+      padding-bottom: 0.15em;
+  }
+
+  .mat-form-field-flex {
+    min-height: 19px;
+  }
+
+  .mat-form-field-underline {
+    bottom: 0;
+  }
+
+  .mat-form-field-infix {
+    padding: 0;
+    border: 0;
+  }
+}
+
+/// Custom table input
+
+.cb-dialog-order {
+  label {
+    margin-bottom: 0;
+  }
+}
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+// Report Global Styles
+
+.report-viewer {
+  thead {
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    font-weight: bold;
+  }
+
+  tbody > tr:hover {
+    background-color: #ECF9FF !important;
+  }
+}

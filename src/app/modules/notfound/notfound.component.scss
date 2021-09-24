@@ -1,0 +1,21 @@
+.maintenance {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    height: 100vh;
+    background-color: #B5BDBF;
+    background-image: linear-gradient(90deg, #B5BDBF, #74797A);
+    text-align: center;
+    text-shadow: 0 0 1px #444444;
+  }
+  
+  .maintenance div {  
+    word-spacing: 10px;
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    padding-top: 50px;
+  }
+  
+  .maintenance p {
+      padding-top: 15px;
+  }
+  

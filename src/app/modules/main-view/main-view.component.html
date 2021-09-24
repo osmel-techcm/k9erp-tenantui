@@ -1,0 +1,42 @@
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+  <mat-toolbar class="example-toolbar">
+    <button mat-icon-button (click)="snav.toggle()" class="menu-btn" [ngClass]="{'open':snav.opened}">
+      <div class="menu-btn-burger"></div>
+    </button>
+    <h1 class="example-app-name">{{_config.CompanyName}}</h1>    
+    <!-- <div class="pull-right">
+      <button mat-button [matMenuTriggerFor]="menu">
+        Companies
+        <mat-icon aria-hidden="false" aria-label="Example home icon">expand_more</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngFor="let ten of tenants" (click)="changeCompany(ten)" class="menu-companies">
+          <div class="icon-company">
+            <mat-icon *ngIf="ten.ConnectionString==tenant">done</mat-icon>
+          </div>
+          <div class="text-company">
+            {{ten.tenantName}}
+          </div>
+        </button>
+      </mat-menu>
+    </div> -->
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-main">    
+    <mat-sidenav #snav mode="over" opened="false">
+      <mat-nav-list class="full-height">
+        <div class="user-info">{{ name }}</div>
+        <app-menu-list-item *ngFor="let item of navItems" [item]="item" [snavMat]="snav"></app-menu-list-item>
+        <div class="company-ads">K9ERP</div>
+      </mat-nav-list>
+    </mat-sidenav>    
+    <router-outlet></router-outlet>
+  </mat-sidenav-container>
+
+</div>
+  
+  <swal title="SweetAlert2 Timer" #idleSwal>
+    <div *swalPortal class="alert alert-info">
+      <strong>{{ idleTimeOutCounter }}</strong> seconds elapsed since the modal was opened.
+    </div>
+  </swal>

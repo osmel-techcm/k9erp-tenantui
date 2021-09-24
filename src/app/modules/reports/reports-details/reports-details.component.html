@@ -1,0 +1,77 @@
+<header class="title">
+    <h1>Report: {{report.name}}</h1>
+    <div class="actions">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="exportToExcel()">
+          <mat-icon>download</mat-icon>
+          <span>Excel</span>
+        </button>
+      </mat-menu>
+    </div>
+</header>
+
+<div class="mat-elevation-z8 group-div" id="headerSection">
+    <mat-card class="main-card">
+        <mat-card-content>
+          <div class="row" *ngFor="let filt of _filtersReports;">            
+            <mat-form-field class="col-sm-2">
+              <mat-label>{{filt.name}}</mat-label>
+              <mat-select [(ngModel)]="filt.valueComparison" (selectionChange)="updateValue(filt)">
+                <mat-option *ngFor="let comparison of filt.listComparisonData" [value]="comparison.id">
+                  {{comparison.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="filt.inputType == 'datepicker'">
+              <mat-form-field class="col-sm-4" *ngIf="filt.valueComparison != 14">
+                <mat-label>Value <span *ngIf="filt.valueComparison == 4 || filt.valueComparison == 5 || filt.valueComparison > 14">From</span></mat-label>
+                <input matInput [matDatepicker]="pickerPrimary" [(ngModel)]="filt.primaryValue" (focus)="pickerPrimary.open()">
+                <mat-datepicker-toggle matSuffix [for]="pickerPrimary"></mat-datepicker-toggle>
+                <mat-datepicker #pickerPrimary></mat-datepicker>
+              </mat-form-field>
+  
+              <mat-form-field class="col-sm-4" *ngIf="filt.valueComparison == 4 || filt.valueComparison == 5 || filt.valueComparison > 14">
+                <mat-label>Value To</mat-label>
+                <input matInput [matDatepicker]="pickerSecondary" [(ngModel)]="filt.secondaryValue" (focus)="pickerSecondary.open()">
+                <mat-datepicker-toggle matSuffix [for]="pickerSecondary"></mat-datepicker-toggle>
+                <mat-datepicker #pickerSecondary></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field *ngIf="filt.inputType == 'input' && filt.valueComparison != 3" class="col-sm-2">
+              <mat-label>Value</mat-label>
+              <input matInput [(ngModel)]="filt.primaryValue">
+            </mat-form-field>
+
+            <mat-form-field *ngIf="filt.inputType == 'autocomplete' && filt.valueComparison != 3" class="col-sm-2">
+              <mat-label>Value</mat-label>
+              <input type="text" aria-label="text" matInput [matAutocomplete]="autoReportValue" [(ngModel)]="filt.primaryValue" 
+                (blur)="checkBlur('primaryValue', filt.dataSource, 'name', 'primaryValueId', filt)"
+                (keyup)="getDataSource(filt)"
+              >
+              <button mat-button matSuffix mat-icon-button aria-label="dropdown" tabindex="-1">
+                <mat-icon>keyboard_arrow_down</mat-icon>
+              </button>
+              <mat-autocomplete #autoReportValue="matAutocomplete">
+                <mat-option *ngFor="let _item of filt.dataSource" [value]="_item.name">{{_item.name}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <mat-card-actions class="text-right">
+            <button mat-raised-button color="primary" (click)="runReport()">Run Report</button>
+            <button mat-raised-button (click)="goToReportList()">Back to List</button>
+          </mat-card-actions>
+
+          <div class="report-viewer">
+            <div [innerHtml]="htmlReport" *ngIf="htmlReport"></div>
+          </div>
+
+        </mat-card-content>
+
+    </mat-card>
+</div>

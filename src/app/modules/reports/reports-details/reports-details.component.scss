@@ -1,0 +1,15 @@
+.group-div {
+  margin: 30px;
+}
+
+.report-viewer {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  div {
+    border: 1px solid #dedede;
+    padding: 15px;
+  }
+}

@@ -1,0 +1,35 @@
+<header class="title">
+    <h1>Units Details</h1>
+    <div class="actions">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="openUnit(0)">
+          <mat-icon>add</mat-icon>
+          <span>New</span>
+        </button>
+        <button mat-menu-item (click)="deleteUnit()" [disabled]="!unit.id">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    </div>
+  </header>
+  
+  <div class="mat-elevation-z8 group-div" id="headerSection">
+    <mat-card class="main-card">
+      <mat-card-content>
+        <div class="row">
+            <mat-form-field class="col-sm-2">
+            <input matInput placeholder="Name" [(ngModel)]="unit.name" required data-validate="name">
+            <mat-error *ngIf="!unit.name">Name is required!</mat-error>
+            </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="text-right">
+        <button mat-raised-button color="primary" (click)="saveUnit()">Save</button>
+        <button mat-raised-button (click)="goToUnitList()">Back to List</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>

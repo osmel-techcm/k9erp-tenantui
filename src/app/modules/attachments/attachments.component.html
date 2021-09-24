@@ -1,0 +1,19 @@
+<div class="main">
+    <button mat-raised-button (click)="fileInputUpload.click()">Upload</button>
+    <input type="file" class="input-upload" (change)="onFileChanged($event)" #fileInputUpload>
+</div>
+
+<div class="file-items">
+    <div class="file-item" *ngFor="let fileItem of fileItems; index as i">
+        <mat-icon class="icon-pre">file_present</mat-icon>
+        <div class="text">{{fileItem.name}}</div>
+
+        <button mat-icon-button color="primary" class="icon-suf-d" (click)="downloadFile(fileItem)">
+            <mat-icon>get_app</mat-icon>
+        </button>
+
+        <button mat-icon-button color="primary" class="icon-suf" (click)="deleteFile(i)">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
