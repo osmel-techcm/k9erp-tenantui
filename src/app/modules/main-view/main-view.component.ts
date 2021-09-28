@@ -76,7 +76,7 @@ export class MainViewComponent implements OnInit {
     this.getConfig()
     
     this.config.startTokenTimer()
-    //this.startHub()
+    this.startHub()
 
     this.getTenants()
 
@@ -84,7 +84,11 @@ export class MainViewComponent implements OnInit {
 
     this.name = JSON.parse(localStorage.getItem('authData'))['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] + ' ' + JSON.parse(localStorage.getItem('authData'))['LastName']
 
-    this._config = this.config._config
+    this._config = this.config._config    
+
+    this.connection.onclose(async (data) => {      
+      setTimeout(() => this.startHub(), 5000);
+    })
   }
 
   getTenants() {
@@ -98,17 +102,21 @@ export class MainViewComponent implements OnInit {
       }
     })
     .configureLogging(LogLevel.Information)
+    //.withAutomaticReconnect()
     .build();
 
   startHub(){
     try {
-        this.connection.start().then(()=>{
-            this.sendMessage();
-        });
+        this.connection.start()
+          .then(()=>{
+              this.sendMessage();
+          })
+          .catch((err) => {
+            setTimeout(() => this.startHub(), 5000);
+          })
 
     } catch (err) {
-        console.log(err);
-        //setTimeout(() => start(), 5000);
+        setTimeout(() => this.startHub(), 5000);
     }
   }
 

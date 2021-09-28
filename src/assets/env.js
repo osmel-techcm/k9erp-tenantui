@@ -7,4 +7,5 @@
     window["env"]["apiUrlMaster"] = "";
     window["env"]["apiUrlDriveManager"] = "";
     window["env"]["apiUrlReport"] = "";
+    window["env"]["apiUrlLog"] = "";
   })(this);
