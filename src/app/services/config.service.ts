@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 import { Router } from '@angular/router';
 import { responseData } from '../models/responseData';
 import { ConfigDTO } from '../models/configDTO';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -143,6 +144,15 @@ export class ConfigService {
 
   saveEmailToken(token){
     localStorage.setItem(this._global.emailToken, token);
+  }
+
+  getAppId(){
+    var appId = localStorage.getItem(this._global.appId)
+    if (!appId) {
+      appId = uuidv4()
+      localStorage.setItem(this._global.appId, appId);
+    }
+    return appId
   }
 
 

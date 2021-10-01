@@ -13,5 +13,6 @@ export class Globals {
   readonly keyTenantId = "tenantId";
   readonly keyTenants = "tenants";
   readonly emailToken = "emailToken";
+  readonly appId = "appId";
   dateServer: Date;
 }
