@@ -2,12 +2,13 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { Globals } from 'src/app/config/globals';
 import { ConfigDTO } from 'src/app/models/configDTO';
 import { MenuItemDTO } from 'src/app/models/menuItemDTO';
+import { UserConnected } from 'src/app/models/userConnected';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { UserGroupsService } from 'src/app/services/user-groups.service';
@@ -41,6 +42,7 @@ export class MainViewComponent implements OnInit {
   name: string
 
   _config = new ConfigDTO()
+  userConnected = new UserConnected()
 
   constructor ( private _router: Router, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private config: ConfigService, 
     private globals: Globals, private _authService: AuthService, private title: Title, private _userGroupsService: UserGroupsService) {
@@ -51,16 +53,25 @@ export class MainViewComponent implements OnInit {
       console.log(e)
     })
 
-    // this._router.events.subscribe(val => {
-    //   if (val instanceof NavigationEnd) {
-    //     //this.updateHubServerUrl(val.urlAfterRedirects);
-    //   }
-    // });
+    this._router.events.subscribe(val => {
+      if (val instanceof NavigationEnd) {
+        this.updateHubServerUrl(val.urlAfterRedirects);
+      }
+    });
 
     this.connection.on("ReceiveMessage", (user, message) => {
       console.log('SignalR:', user, message)
     }); 
    }
+
+  updateHubServerUrl(urlAfterRedirects: string) {    
+    if (this.connection.state != 'Connected') {
+      setTimeout(() => this.updateHubServerUrl(urlAfterRedirects), 1000)
+      return
+    }
+    console.log('updateUrlUser');    
+    this.connection.invoke("updateUrlUser", urlAfterRedirects).catch(err => console.error(err));
+  }
 
   ngOnInit(): void {   
     
@@ -76,7 +87,7 @@ export class MainViewComponent implements OnInit {
     this.getConfig()
     
     this.config.startTokenTimer()
-    //this.startHub()
+    this.startHub()
 
     this.getTenants()
 
@@ -84,7 +95,11 @@ export class MainViewComponent implements OnInit {
 
     this.name = JSON.parse(localStorage.getItem('authData'))['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] + ' ' + JSON.parse(localStorage.getItem('authData'))['LastName']
 
-    this._config = this.config._config
+    this._config = this.config._config    
+
+    this.connection.onclose(async (data) => {      
+      setTimeout(() => this.startHub(), 5000);
+    })
   }
 
   getTenants() {
@@ -95,25 +110,32 @@ export class MainViewComponent implements OnInit {
     .withUrl(this.globals.apiUrlWebSocket + "mainhub", {
       accessTokenFactory: () => {
         return localStorage.getItem(this.globals.keyStoreLogin)
-      }
+      },
+      headers: {"x-tenant-id": localStorage.getItem(this.globals.keyTenantId)}
     })
     .configureLogging(LogLevel.Information)
     .build();
 
   startHub(){
     try {
-        this.connection.start().then(()=>{
-            this.sendMessage();
-        });
+        this.connection.start()
+          .then(()=>{
+              this.connectUser();
+          })
+          .catch((err) => {
+            setTimeout(() => this.startHub(), 5000);
+          })
 
     } catch (err) {
-        console.log(err);
-        //setTimeout(() => start(), 5000);
+        setTimeout(() => this.startHub(), 5000);
     }
   }
 
-  sendMessage(){
-    this.connection.invoke("SendMessage", 'osmel', 'hola server').catch(err => console.error(err));
+  connectUser(){
+    this.userConnected.appId = this.config.getAppId()
+    this.userConnected.companyId = this.config.getTenant()
+    this.userConnected.deviceType = 1
+    this.connection.invoke("connectUser", this.userConnected).catch(err => console.error(err));
   }
 
   getConfig() {

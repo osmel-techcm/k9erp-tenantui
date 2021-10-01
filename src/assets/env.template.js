@@ -7,4 +7,5 @@
     window["env"]["apiUrlWebSocket"] = "${API_URL_SIGNALR}";
     window["env"]["apiUrlDriveManager"] = "${API_URL_DRIVEMANAGER}";
     window["env"]["apiUrlReport"] = "${API_URL_REPORT}";
+    window["env"]["apiUrlLog"] = "${API_URL_LOG}";
   })(this);
