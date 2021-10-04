@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
-import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { Globals } from 'src/app/config/globals';
 import { ConfigDTO } from 'src/app/models/configDTO';
@@ -11,6 +10,7 @@ import { MenuItemDTO } from 'src/app/models/menuItemDTO';
 import { UserConnected } from 'src/app/models/userConnected';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConfigService } from 'src/app/services/config.service';
+import { HubconnectionService } from 'src/app/services/hubconnection.service';
 import { UserGroupsService } from 'src/app/services/user-groups.service';
 
 @Component({
@@ -45,7 +45,7 @@ export class MainViewComponent implements OnInit {
   userConnected = new UserConnected()
 
   constructor ( private _router: Router, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private config: ConfigService, 
-    private globals: Globals, private _authService: AuthService, private title: Title, private _userGroupsService: UserGroupsService) {
+    private globals: Globals, private _authService: AuthService, private title: Title, private _userGroupsService: UserGroupsService, private _hubConnection: HubconnectionService) {
     this.mobileQuery = media.matchMedia("(max-width: 600px)");
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
 
@@ -59,18 +59,17 @@ export class MainViewComponent implements OnInit {
       }
     });
 
-    this.connection.on("ReceiveMessage", (user, message) => {
+    this._hubConnection.connection.on("ReceiveMessage", (user, message) => {
       console.log('SignalR:', user, message)
     }); 
    }
 
   updateHubServerUrl(urlAfterRedirects: string) {    
-    if (this.connection.state != 'Connected') {
+    if (this._hubConnection.connection.state != 'Connected') {
       setTimeout(() => this.updateHubServerUrl(urlAfterRedirects), 1000)
       return
     }
-    console.log('updateUrlUser');    
-    this.connection.invoke("updateUrlUser", urlAfterRedirects).catch(err => console.error(err));
+    this._hubConnection.connection.invoke("updateUrlUser", urlAfterRedirects).catch(err => console.error(err));
   }
 
   ngOnInit(): void {   
@@ -95,10 +94,12 @@ export class MainViewComponent implements OnInit {
 
     this.name = JSON.parse(localStorage.getItem('authData'))['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] + ' ' + JSON.parse(localStorage.getItem('authData'))['LastName']
 
-    this._config = this.config._config    
+    this._config = this.config._config
 
-    this.connection.onclose(async (data) => {      
-      setTimeout(() => this.startHub(), 5000);
+    this._hubConnection.connection.onclose(async (data) => {      
+      if (this._authService.loggedIn()) {
+        setTimeout(() => this.startHub(), 5000);
+      }      
     })
   }
 
@@ -106,19 +107,19 @@ export class MainViewComponent implements OnInit {
     this.tenants = this.config.getTenants().tenants
   }
 
-  connection = new HubConnectionBuilder()
-    .withUrl(this.globals.apiUrlWebSocket + "mainhub", {
-      accessTokenFactory: () => {
-        return localStorage.getItem(this.globals.keyStoreLogin)
-      },
-      headers: {"x-tenant-id": localStorage.getItem(this.globals.keyTenantId)}
-    })
-    .configureLogging(LogLevel.Information)
-    .build();
+  // connection = new HubConnectionBuilder()
+  //   .withUrl(this.globals.apiUrlWebSocket + "mainhub", {
+  //     accessTokenFactory: () => {
+  //       return localStorage.getItem(this.globals.keyStoreLogin)
+  //     },
+  //     headers: {"x-tenant-id": localStorage.getItem(this.globals.keyTenantId)}
+  //   })
+  //   .configureLogging(LogLevel.Information)
+  //   .build();
 
   startHub(){
     try {
-        this.connection.start()
+        this._hubConnection.connection.start()
           .then(()=>{
               this.connectUser();
           })
@@ -135,7 +136,7 @@ export class MainViewComponent implements OnInit {
     this.userConnected.appId = this.config.getAppId()
     this.userConnected.companyId = this.config.getTenant()
     this.userConnected.deviceType = 1
-    this.connection.invoke("connectUser", this.userConnected).catch(err => console.error(err));
+    this._hubConnection.connection.invoke("connectUser", this.userConnected).catch(err => console.error(err));
   }
 
   getConfig() {
@@ -146,7 +147,7 @@ export class MainViewComponent implements OnInit {
     if (!nav.children) {
       this.sidenav.toggle()
     }
-    console.log(nav)
+    //console.log(nav)
   }
 
   changeCompany(ten){    

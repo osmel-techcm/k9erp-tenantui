@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { responseData } from '../models/responseData';
 import { ConfigDTO } from '../models/configDTO';
 import { v4 as uuidv4 } from 'uuid';
+import { HubconnectionService } from './hubconnection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class ConfigService {
   private _serverMasterStatusAlive = false;
   public _config = new ConfigDTO()
 
-  constructor(private http: HttpClient, private _global: Globals, private _router: Router) { }
+  constructor(private http: HttpClient, private _global: Globals, private _router: Router, private _hubConnection: HubconnectionService) { }
 
   checkMasterServerStatus() {
     return this.http.get<any>(this._global.apiUrlMaster + "api/Account/serverStatusAlive")
@@ -127,10 +128,11 @@ export class ConfigService {
   }
 
   logoutUser() {
-    localStorage.removeItem(this._global.keyStoreLogin);
-    localStorage.removeItem(this._global.keyStoreAuth);
-    localStorage.removeItem(this._global.keyTenantId);
-    localStorage.removeItem(this._global.keyTenants);
+    localStorage.removeItem(this._global.keyStoreLogin)
+    localStorage.removeItem(this._global.keyStoreAuth)
+    localStorage.removeItem(this._global.keyTenantId)
+    localStorage.removeItem(this._global.keyTenants)
+    this._hubConnection.connection.stop()
     this._router.navigate(["/login"])
   }
 
