@@ -21,6 +21,7 @@ import { VendorsDetailsComponent } from './modules/entity/vendors/vendors-detail
 import { VendorsComponent } from './modules/entity/vendors/vendors/vendors.component';
 import { ReportsDetailsComponent } from './modules/reports/reports-details/reports-details.component';
 import { ReportsComponent } from './modules/reports/reports/reports.component';
+import { UsersProfileComponent } from './modules/users/users-profile/users-profile.component';
 
 
 const routes: Routes = [
@@ -33,6 +34,7 @@ const routes: Routes = [
       { path: "dashboard", component: DashboardComponent },
       { path: "users/:id", component: UsersDetailsComponent },
       { path: "users", component: UsersComponent },
+      { path: "userprofile", component: UsersProfileComponent },
       { path: "usergroups/:id", component: UserGroupsDetailsComponent },
       { path: "usergroups", component: UserGroupsComponent },
       { path: "classes/:id", component: ClassesDetailsComponent},

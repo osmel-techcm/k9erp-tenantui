@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Configure Authenticator App</h2>
+
+<mat-dialog-content>
+    <h3>Scan the QR Code</h3>
+    <mat-spinner *ngIf="!imageSource"></mat-spinner>
+    <img [src]="imageSource" *ngIf="imageSource">
+    <div class="margin-top-10">
+        <mat-form-field>
+            <mat-label>Code</mat-label>
+            <input matInput  [(ngModel)]="code">
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+
+<p>{{message}}</p>
+
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="closeDialog(false)">Cancel</button>
+    <button mat-button (click)="saveDialog()" cdkFocusInitial>Save</button>
+</div>
