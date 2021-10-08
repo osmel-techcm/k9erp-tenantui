@@ -33,8 +33,10 @@ export class LoginComponent implements OnInit {
   };
 
   tenantId: string;
-
   ajaxRequest: boolean = false;
+  twoFactor: boolean = false;
+  twoFactorCode: string;
+  tenantData;
 
   constructor(private _auth: AuthService, private _router: Router, public dialogTenant: MatDialog, public _globals: Globals, private config: ConfigService) { }
 
@@ -64,40 +66,71 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  loginUser() {
-    if (!this.userData.email) {
-      this.openDialog(null, "Please insert a email!");
-      return;
-    }
+  loginUser() {    
 
-    if (!this.userData.password) {
-      this.openDialog(null, "Please insert a password!");
-      return;
-    }
+    if (this.twoFactor) {
 
-    this.ajaxRequest = true;
+      if (!this.twoFactorCode) {
+        this.openDialog(null, "Please insert a code!");
+        return;
+      }
 
-    this._auth.loginUser(this.userData).subscribe(
-      res => {
-        if (!res.error) {          
-          this.config.saveTenants(res.data)          
-          if (res.data.multiTenant){
-            const dialogRef = this.dialogTenant.open(LoginDialogComponent, {              
-              data: res.data.tenants,
-              disableClose: true
-            });
-          } else{
-            this.config.saveTokenStorage(res.data.tenants[0].tenantToken)
-            this.config.saveTenantStorage(res.data.tenants[0].ConnectionString)
-            this._router.navigate(["/mainview"]);
+      this._auth.validateOTP(this.tenantData, this.twoFactorCode).subscribe(
+        data => {
+          if (data.error) {
+            this.openDialog(null, data.description);
           }
-        } else {
-          this.openDialog(null, res.description);
+          this.tenantData.tenants = data.data
+          console.log("tenantData - 2 - ", this.tenantData)
+          this.saveLoginData()
         }
-      },
-      err => (this.ajaxRequest = false),
-      () => (this.ajaxRequest = false)
-    );
+      )
+      
+    } else {
+
+      if (!this.userData.email) {
+        this.openDialog(null, "Please insert a email!");
+        return;
+      }
+  
+      if (!this.userData.password) {
+        this.openDialog(null, "Please insert a password!");
+        return;
+      }
+
+      this.ajaxRequest = true;
+
+      this._auth.loginUser(this.userData).subscribe(
+        res => {
+          if (!res.error) {
+            this.twoFactor = res.data.twoFactor
+            this.tenantData = res.data
+            console.log("tenantData - 1 - ", this.tenantData)
+            if (!this.twoFactor) {
+              this.saveLoginData()
+            }
+          } else {
+            this.openDialog(null, res.description);
+          }
+        },
+        err => (this.ajaxRequest = false),
+        () => (this.ajaxRequest = false)
+      );
+    }
   }
+
+  saveLoginData() {
+    this.config.saveTenants(this.tenantData)          
+    if (this.tenantData.multiTenant){
+      const dialogRef = this.dialogTenant.open(LoginDialogComponent, {              
+        data: this.tenantData.tenants,
+        disableClose: true
+      });
+    } else{
+      this.config.saveTokenStorage(this.tenantData.tenants[0].tenantToken)
+      this.config.saveTenantStorage(this.tenantData.tenants[0].ConnectionString)
+      this._router.navigate(["/mainview"]);
+    }
+}
 
 }

@@ -4,19 +4,26 @@
       <mat-card-header>      
         
       </mat-card-header>
-      <mat-card-content>
+      <mat-card-content *ngIf="!twoFactor">
         <mat-form-field class="input-login">
           <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="userData.email" required name="email" type="text" autofocus>
+          <input matInput [(ngModel)]="userData.email" required name="email" type="text" autofocus [disabled]="ajaxRequest">
         </mat-form-field>
         <br>
         <mat-form-field class="input-login">
           <mat-label>Password</mat-label>
-          <input matInput [(ngModel)]="userData.password" required name="password" type="password">
+          <input matInput [(ngModel)]="userData.password" required name="password" type="password" [disabled]="ajaxRequest">
+        </mat-form-field>
+        <mat-progress-bar mode="indeterminate" *ngIf="ajaxRequest"></mat-progress-bar>
+      </mat-card-content>
+      <mat-card-content *ngIf="twoFactor">
+        <mat-form-field class="input-login">
+          <mat-label>Code</mat-label>
+          <input matInput [(ngModel)]="twoFactorCode" required type="text" autofocus [disabled]="ajaxRequest" name="twoFactorCode">
         </mat-form-field>
       </mat-card-content>
       <mat-card-actions fxLayoutAlign="center">
-        <button mat-raised-button color="primary">LOG IN</button>
+        <button mat-raised-button color="primary" [disabled]="ajaxRequest">LOG IN</button>
       </mat-card-actions>
     </mat-card>
   </div>

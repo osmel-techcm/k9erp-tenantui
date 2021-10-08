@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { AspNetUsers } from 'src/app/models/aspNetUsers';
@@ -6,6 +7,7 @@ import { AspNetUsersGroups } from 'src/app/models/aspNetUsersGroups';
 import { PaginatorData } from 'src/app/models/PaginatorData';
 import { UserGroupsService } from 'src/app/services/user-groups.service';
 import { UsersService } from 'src/app/services/users.service';
+import { UsersDetailsTwoFactorComponent } from '../users-details-two-factor/users-details-two-factor.component';
 
 @Component({
   selector: 'app-users-details',
@@ -20,7 +22,7 @@ export class UsersDetailsComponent implements OnInit {
   paginatorData = new PaginatorData()
 
   constructor(private _router: Router, private route: ActivatedRoute, private _usersService: UsersService, 
-    private _userGroupsService: UserGroupsService, private _snackBar: MatSnackBar) { }
+    private _userGroupsService: UserGroupsService, private _snackBar: MatSnackBar, public dialog: MatDialog) { }
 
   ngOnInit(): void {
 
@@ -126,6 +128,12 @@ export class UsersDetailsComponent implements OnInit {
       duration: 2000,
       panelClass: ['green-snackbar']
     });
+  }
+
+  openTwoFactorDialog(){
+    this.dialog.open(UsersDetailsTwoFactorComponent, {
+      data: this._user.id
+    })
   }
 
 }

@@ -27,4 +27,12 @@ export class UsersService {
   postUser(user: AspNetUsers){
     return this.http.post<responseData>(this._global.apiUrlMaster + "api/AspNetUsers/PostUserByTenant", user)
   }
+
+  getTwoFactorAuth(userId: string){
+    return this.http.post<responseData>(this._global.apiUrlMaster + "api/AspNetUsers/GetTwoFactorAuth?id=" + userId, null)
+  }
+
+  enableTwoFactorAuth(id: string, code: string){
+    return this.http.put<responseData>(this._global.apiUrlMaster + "api/AspNetUsers/EnableTwoFactorAuth?id=" + id + "&code=" + code, null)
+  }
 }
